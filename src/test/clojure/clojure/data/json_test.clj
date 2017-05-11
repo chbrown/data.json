@@ -197,6 +197,7 @@
   (is (= "\"\\u1234\\u4567\"" (json/write-str "\u1234\u4567"))))
 
 (deftest print-nonescaped-unicode
+  (is (= "\"\\u0000\\t\\u001f \"" (json/write-str "\u0000\u0009\u001f\u0020" :escape-unicode false)))
   (is (= "\"\u1234\u4567\"" (json/write-str "\u1234\u4567" :escape-unicode false))))
 
 (deftest escape-special-separators

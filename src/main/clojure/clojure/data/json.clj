@@ -41,6 +41,14 @@
         [(map int test) result]
         (= test :whitespace)
         ['(9 10 13 32) result]
+        (= test :control-characters)
+        [(remove #{(codepoint \backspace)
+                   (codepoint \formfeed)
+                   (codepoint \newline)
+                   (codepoint \return)
+                   (codepoint \tab)}
+                 (range 0 32))
+         result]
         (= test :simple-ascii)
         [(remove #{(codepoint \") (codepoint \\) (codepoint \/)}
                  (range 32 127))
@@ -305,6 +313,8 @@
           \newline   (.append sb "\\n")
           \return    (.append sb "\\r")
           \tab       (.append sb "\\t")
+          ;; Control characters except for JSON escapes
+          :control-characters (.append sb (format "\\u%04x" cp))
           ;; Unicode characters that Javascript forbids raw in strings
           :js-separators (if *escape-js-separators*
                            (.append sb (format "\\u%04x" cp))
