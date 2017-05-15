@@ -1,22 +1,17 @@
-data.json
-========================================
+# data.json
 
 JSON parser/generator to/from Clojure data structures.
 
 Follows the specification on http://json.org/
 
 
+## Releases and Dependency Information
 
-Releases and Dependency Information
-----------------------------------------
-
-Latest stable release is [0.2.6]
-
-[Leiningen] dependency information:
+[Leiningen](http://leiningen.org/) dependency information:
 
     [org.clojure/data.json "0.2.6"]
 
-[Maven] dependency information:
+[Maven](http://maven.apache.org/) dependency information:
 
     <dependency>
       <groupId>org.clojure</groupId>
@@ -24,27 +19,18 @@ Latest stable release is [0.2.6]
       <version>0.2.6</version>
     </dependency>
 
-[Gradle] dependency information:
+[Gradle](http://www.gradle.org/) dependency information:
 
     compile "org.clojure:data.json:0.2.6"
-
-[Leiningen]: http://leiningen.org/
-[Maven]: http://maven.apache.org/
-[Gradle]: http://www.gradle.org/
-
 
 Other versions:
 
 * [All Released Versions](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.clojure%22%20AND%20a%3A%22data.json%22)
-
 * [Development Snapshots](https://oss.sonatype.org/index.html#nexus-search;gav~org.clojure~data.json~~~)
-
 * [Development Snapshot Repositories](http://dev.clojure.org/display/doc/Maven+Settings+and+Repositories)
 
 
-
-Usage
-----------------------------------------
+## Usage
 
 [API Documentation](http://clojure.github.com/data.json/)
 
@@ -61,8 +47,7 @@ To convert to/from JSON strings, use `json/write-str` and `json/read-str`:
     (json/read-str "{\"a\":1,\"b\":2}")
     ;;=> {"a" 1, "b" 2}
 
-Note that these operations are not symmetric: converting Clojure data
-into JSON is lossy.
+Note that these operations are not symmetric: converting Clojure data into JSON is lossy.
 
 
 ### Converting Key/Value Types
@@ -81,9 +66,8 @@ You can specify a `:key-fn` to convert map keys on the way in or out:
                    :key-fn #(keyword "com.example" %))
     ;;=> {:com.example/a 1, :com.example/b 2}
 
-You can specify a `:value-fn` to convert map values on the way in or
-out. The value-fn will be called with two arguments, the key and the
-value, and it returns the updated value.
+You can specify a `:value-fn` to convert map values on the way in or out.
+The value-fn will be called with two arguments, the key and the value, and it returns the updated value.
 
     (defn my-value-reader [key value]
       (if (= key :date)
@@ -92,22 +76,17 @@ value, and it returns the updated value.
 
     (json/read-str "{\"number\":42,\"date\":\"2012-06-02\"}"
                    :value-fn my-value-reader
-                   :key-fn keyword) 
+                   :key-fn keyword)
     ;;=> {:number 42, :date #inst "2012-06-02T04:00:00.000-00:00"}
 
-Be aware that `:value-fn` only works on maps (JSON objects). If your
-root data structure is, for example, a vector of dates, you will need
-to pre- or post-process it outside of data.json. [clojure.walk] may be
-useful for this.
-
-[clojure.walk]: http://clojure.github.io/clojure/clojure.walk-api.html
+Be aware that `:value-fn` only works on maps (JSON objects).
+If your root data structure is, for example, a vector of dates, you will need to pre- or post-process it outside of data.json.
+[clojure.walk](http://clojure.github.io/clojure/clojure.walk-api.html) may be useful for this.
 
 
 ### Order of key-fn / value-fn
 
-If you specify both a `:key-fn` and a `:value-fn` when **reading**,
-the value-fn is called **after** the key has been processed by the
-key-fn.
+If you specify both a `:key-fn` and a `:value-fn` when **reading**, the value-fn is called **after** the key has been processed by the key-fn.
 
 The **reverse** is true when **writing**:
 
@@ -118,51 +97,40 @@ The **reverse** is true when **writing**:
 
     (json/write-str {:number 42, :date (java.util.Date. 112 5 2)}
                     :value-fn my-value-writer
-                    :key-fn name) 
+                    :key-fn name)
     ;;=> "{\"number\":42,\"date\":\"2012-06-02\"}"
 
 
 ### Reading/Writing a Stream
 
-You can also read JSON directly from a java.io.Reader with `json/read`
-and write JSON directly to a java.io.Writer with `json/write`.
+You can also read JSON directly from a `java.io.Reader` with `json/read` and write JSON directly to a `java.io.Writer` with `json/write`.
 
 
 ### More
 
-Other options are available. Refer to the [API Documentation] for details.
-
-[API Documentation]: http://clojure.github.com/data.json/
-
+Other options are available.
+Refer to the [API Documentation](http://clojure.github.com/data.json/) for details.
 
 
-Developer Information
-----------------------------------------
+## Developer Information
 
 * [GitHub project](https://github.com/clojure/data.json)
-
 * [How to contribute](http://dev.clojure.org/display/community/Contributing)
-
 * [Bug Tracker](http://dev.clojure.org/jira/browse/DJSON)
-
 * [Continuous Integration](http://build.clojure.org/job/data.json/)
-
 * [Compatibility Test Matrix](http://build.clojure.org/job/data.json-test-matrix/)
 
 
-
-Change Log
-----------------------------------------
+## Change Log
 
 * Development version 0.2.7-SNAPSHOT (current Git `master`)
 * Release [0.2.6] on 2015-Mar-6
   * Modify build to produce an AOT package with classifier "aot"
 * Release [0.2.5] on 2014-Jun-13
-  * Fix [DJSON-17]: throw exception on Infinite or NaN floating-point
-    values. Old behavior could produce invalid JSON.
+  * Fix [DJSON-17]: throw exception on Infinite or NaN floating-point values.
+    Old behavior could produce invalid JSON.
 * Release [0.2.4] on 2014-Jan-10
-  * Small change in behavior: `clojure.data.json/pprint` now adds a
-    newline after its output just like `clojure.core/pprint`
+  * Small change in behavior: `clojure.data.json/pprint` now adds a newline after its output just like `clojure.core/pprint`
   * Fix [DJSON-13]: flush output after pprint
   * Fix [DJSON-14]: handle EOF inside character escape
   * Fix [DJSON-15]: bad syntax in test
@@ -173,16 +141,13 @@ Change Log
   * Fix [DJSON-7]: extra commas when removing key/value pairs)
   * Fix [DJSON-8]: wrong output stream in `write-json`
 * Release [0.2.1] on 2012-Oct-26
-  * Restores backwards-compatibility with 0.1.x releases. The older
-    0.1.x APIs are marked as deprecated in their documentation. They
-    will be removed in a future release.
+  * Restores backwards-compatibility with 0.1.x releases.
+    The older 0.1.x APIs are marked as deprecated in their documentation.
+    They will be removed in a future release.
 * Release [0.2.0] on 2012-Oct-12
-  * **Not recommended for use**: this release introduced breaking API
-    changes (renaming core functions) without any path for
-    backwards-compatibility. Applications with transitive dependencies
-    on both the 0.2.x and 0.1.x APIs cannot use this version.
-  * New :key-fn and :value-fn permit flexible transformation
-    of values when reading & writing JSON
+  * **Not recommended for use**: this release introduced breaking API changes (renaming core functions) without any path for backwards-compatibility.
+    Applications with transitive dependencies on both the 0.2.x and 0.1.x APIs cannot use this version.
+  * New `:key-fn` and `:value-fn` permit flexible transformation of values when reading & writing JSON
   * Support for reading large integers as BigInt
   * Optional support for reading decimals as BigDecimal
   * Performance improvements
@@ -221,9 +186,7 @@ Change Log
 [0.1.0]: https://github.com/clojure/data.json/tree/data.json-0.1.0
 
 
-
-Copyright and License
-----------------------------------------
+## Copyright and License
 
 Copyright (c) Stuart Sierra, 2012. All rights reserved.  The use and
 distribution terms for this software are covered by the Eclipse Public
