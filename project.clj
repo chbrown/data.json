@@ -1,4 +1,4 @@
-(defproject chbrown/data.json "0.2.7-SNAPSHOT"
+(defproject chbrown/data.json "0.2.7"
   :description "JSON parser/generator to/from Clojure data structures"
   :url "https://github.com/chbrown/data.json"
   :license {:name "Eclipse Public License"
